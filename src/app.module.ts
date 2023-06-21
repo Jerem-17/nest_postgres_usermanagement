@@ -5,15 +5,11 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { NotificationsModule } from './notifications/notifications.module';
-import { UsersService } from './users/services/users.service';
-import { NotificationsService } from './notifications/services/notifications.service';
-import { UsersController } from './users/controllers/users.controller';
-import { NotificationsController } from './notifications/controllers/notifications.controller';
-import { UserEntity } from './users/models/users.entity';
-import { NotificationEntity } from './notifications/models/notifications.entity';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -22,7 +18,6 @@ import { NotificationEntity } from './notifications/models/notifications.entity'
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
-      // entities: [UserEntity, NotificationEntity],
       autoLoadEntities: true,
       synchronize: true,
     }),

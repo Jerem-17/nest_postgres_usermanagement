@@ -13,3 +13,15 @@
 ### CREATE CONTROLLER ###
 
 *** nest g controller <module_name>/controllers/<module_name> ***
+
+### CONNECT TO POSTGRES CLI ###
+*** sudo -u postgres psql ***
+
+### CONNECT TO A DATABASE ###
+*** \c <db_name> ***
+
+### SHOW TABLES ###
+*** \dt ***
+
+### SQL ###
+*** SELECT * FROM <table>; ***

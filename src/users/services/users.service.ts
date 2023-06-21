@@ -4,25 +4,20 @@ import { UserEntity } from '../models/users.entity';
 import { User } from '../models/users.interface';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { Observable, Subject, from, map, switchMap, tap } from 'rxjs';
-import { NotificationEntity } from 'src/notifications/models/notifications.entity';
-import { Notification } from 'src/notifications/models/notifications.interface';
+import { Observable, from } from 'rxjs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class UsersService {
-  private userModifiedSubject = new Subject<User>();
-
   constructor(
+    private eventEmitter: EventEmitter2,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-    private readonly notificationRepository: Repository<NotificationEntity>,
   ) {}
 
-  userModified(): Observable<User> {
-    return this.userModifiedSubject.asObservable();
-  }
-
   createUser(user: User): Observable<User> {
+    this.eventEmitter.emit('user.created', user);
+
     return from(this.userRepository.save(user));
   }
 
@@ -30,39 +25,18 @@ export class UsersService {
     return from(this.userRepository.find());
   }
 
-  updateUser(id: number, user: Partial<User>): Observable<UpdateResult> {
-    return from(this.userRepository.update(id, user)).pipe(
-      switchMap(() => this.getUserById(id)),
-      tap((user) => this.userModifiedSubject.next(user)),
-      switchMap((user) =>
-        this.createNotification(`Utilisateur ${user.lastname} modifie`, user),
-      ),
-    );
-  }
-
-  private getUserById(id: number): Observable<User> {
+  findOneUser(id: number): Observable<User> {
     return from(this.userRepository.findOneBy({ id }));
   }
 
-  deleteUser(id: number): Observable<DeleteResult> {
-    return from(this.userRepository.delete(id));
+  updateUser(id: number, user: Partial<User>): Observable<UpdateResult> {
+    this.eventEmitter.emit('user.updated', user);
+    return from(this.userRepository.update(id, user));
   }
 
-  private createNotification(
-    message: string,
-    user: User,
-  ): Observable<UpdateResult> {
-    const notification: Notification = {
-      message,
-      user,
-    };
-
-    return from(this.notificationRepository.save(notification)).pipe(
-      map(() => {
-        const rawResult = {} as UpdateResult;
-        rawResult.affected = 1;
-        return rawResult;
-      }),
-    );
+  deleteUser(id: number): Observable<DeleteResult> {
+    const user = this.userRepository.findOneBy({ id });
+    this.eventEmitter.emit('user.deleted', user);
+    return from(this.userRepository.delete(id));
   }
 }

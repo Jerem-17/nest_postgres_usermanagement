@@ -26,6 +26,11 @@ export class UsersController {
     return this.userService.findAllUsers();
   }
 
+  @Get(':id')
+  findOneUser(@Param('id', ParseIntPipe) id: number): Observable<User> {
+    return this.userService.findOneUser(id);
+  }
+
   @Put(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
