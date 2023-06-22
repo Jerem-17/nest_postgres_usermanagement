@@ -6,26 +6,26 @@ POST  http://localhost:3000/api/users HTTP/1.1
 Content-Type: application/json 
 
 {
-    "firstname": "Keez",
+    "firstname": "Koffi",
     "lastname": "Aron",
     "age": 23
 }
 
 ###
 
-PUT  http://localhost:3000/api/users/8 HTTP/1.1
+PUT  http://localhost:3000/api/users/6 HTTP/1.1
 Content-Type: application/json 
 
 {
-    "firstname": "Keren",
-    "lastname": "Salim",
+    "firstname": "Koffi",
+    "lastname": "Salima",
     "age": 23
 }
 
 
 ###
 
-DELETE   http://localhost:3000/api/users/4 HTTP/1.1
+DELETE   http://localhost:3000/api/users/7 HTTP/1.1
 
 
 ###

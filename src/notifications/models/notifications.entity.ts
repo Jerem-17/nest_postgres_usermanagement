@@ -9,6 +9,12 @@ export class NotificationEntity {
   @Column()
   message: string;
 
+  @Column({ default: 0 })
+  hour: number;
+
+  @Column({ default: 0 })
+  minute: number;
+
   @ManyToMany(() => UserEntity, (user) => user.notifications)
   user: UserEntity;
 

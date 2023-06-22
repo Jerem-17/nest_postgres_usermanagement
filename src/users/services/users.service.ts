@@ -29,6 +29,19 @@ export class UsersService {
     return from(this.userRepository.findOneBy({ id }));
   }
 
+  async getUpdateUserId(firstname: string, lastname: string) {
+    const user = await this.userRepository.find({
+      where: { firstname, lastname },
+      select: ['id'],
+    });
+
+    if (user.length > 0) {
+      return user[0].id;
+    }
+
+    return null;
+  }
+
   updateUser(id: number, user: Partial<User>): Observable<UpdateResult> {
     this.eventEmitter.emit('user.updated', user);
     return from(this.userRepository.update(id, user));

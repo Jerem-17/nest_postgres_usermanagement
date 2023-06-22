@@ -19,6 +19,8 @@ export class NotificationsService {
     const notification: Notification = {
       message,
       user,
+      hour: new Date().getHours(),
+      minute: new Date().getMinutes(),
     };
 
     return from(this.notificationRepository.save(notification));
