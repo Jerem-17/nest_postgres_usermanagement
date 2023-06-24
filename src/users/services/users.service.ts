@@ -22,21 +22,27 @@ export class UsersService {
   }
 
   findAllUsers(): Observable<User[]> {
-    return from(this.userRepository.find());
+    return from(
+      this.userRepository.find({
+        order: {
+          id: 'DESC',
+        },
+      }),
+    );
   }
 
   findOneUser(id: number): Observable<User> {
     return from(this.userRepository.findOneBy({ id }));
   }
 
-  async getUpdateUserId(firstname: string, lastname: string) {
-    const user = await this.userRepository.find({
-      where: { firstname, lastname },
+  async getUserId(firstname: string, lastname: string, age: number) {
+    const users = await this.userRepository.find({
+      where: { firstname, lastname, age },
       select: ['id'],
     });
 
-    if (user.length > 0) {
-      return user[0].id;
+    if (users.length > 0) {
+      return users[0].id;
     }
 
     return null;

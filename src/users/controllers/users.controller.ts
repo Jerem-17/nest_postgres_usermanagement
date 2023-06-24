@@ -31,6 +31,15 @@ export class UsersController {
     return this.userService.findOneUser(id);
   }
 
+  @Get(':firstname/:lastname/:age')
+  getId(
+    @Param('firstname') firstname: string,
+    @Param('lastname') lastname: string,
+    @Param('age') age: number,
+  ): Promise<number> {
+    return this.userService.getUserId(firstname, lastname, age);
+  }
+
   @Put(':id')
   update(
     @Param('id', ParseIntPipe) id: number,

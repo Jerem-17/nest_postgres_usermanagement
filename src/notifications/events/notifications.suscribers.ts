@@ -11,7 +11,7 @@ export class NotificationSubscriber {
   handleUserCreatedEvent(payload: User) {
     console.log('Nouvel utilisateur créé :', payload);
     this.notificationService.createNotification(
-      `Nouvel utilisateur créé : ${JSON.stringify(payload)}`,
+      `Nouvel utilisateur  ${payload.lastname} créé`,
       payload,
     );
   }
@@ -20,7 +20,7 @@ export class NotificationSubscriber {
   handleUserUpdatedEvent(payload: User) {
     console.log('Utilisateur modifié :', payload);
     this.notificationService.createNotification(
-      `Utilisateur modifié : ${JSON.stringify(payload)}`,
+      `Utilisateur ${payload.lastname} modifié`,
       payload,
     );
   }
@@ -29,7 +29,7 @@ export class NotificationSubscriber {
   handleUserDeletedEvent(payload: User) {
     console.log('Utilisateur supprimé  :', payload);
     this.notificationService.createNotification(
-      `Utilisateur supprimé : ${JSON.stringify(payload)}`,
+      `Utilisateur  ${payload.lastname} supprimé`,
       payload,
     );
   }

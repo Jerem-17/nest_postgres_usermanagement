@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Notification } from '../models/notifications.interface';
 import { Observable, from } from 'rxjs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { User } from 'src/users/models/users.interface';
 import { NotificationEntity } from '../models/notifications.entity';
@@ -27,6 +27,16 @@ export class NotificationsService {
   }
 
   getNotification(): Observable<Notification[]> {
-    return from(this.notificationRepository.find());
+    return from(
+      this.notificationRepository.find({
+        order: {
+          id: 'DESC',
+        },
+      }),
+    );
+  }
+
+  deleteNotification(id: number): Observable<DeleteResult> {
+    return from(this.notificationRepository.delete(id));
   }
 }
